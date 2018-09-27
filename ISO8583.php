@@ -1,5 +1,8 @@
 <?php
 
+require_once('FieldsInfo.php');
+require_once('Debug.php');
+
 class ISO8583
 {
 	// ISO Versions:
@@ -379,6 +382,9 @@ class ISO8583
 		}
 
 		Debug::getInstance()->printDebug("Message (".strlen($this->msg)."): [".$this->msg."]\n");
+
+		// Converting lowercase chars to uppercase...
+		$this->msg = strtoupper($this->msg);
 
 		return $this->msg;
 	}

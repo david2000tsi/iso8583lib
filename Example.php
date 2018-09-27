@@ -1,8 +1,6 @@
 <?php
 
-require('FieldsInfo.php');
-require('ISO8583.php');
-require('Debug.php');
+require_once('ISO8583.php');
 
 $iso = new ISO8583(ISO8583::ISO8583_1987);
 
