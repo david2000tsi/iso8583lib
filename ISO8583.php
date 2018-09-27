@@ -369,8 +369,8 @@ class ISO8583
 
 				if($this->fieldsInfo->isVariableField($realI))
 				{
-					$sizeLenght = $this->fieldsInfo->getSizeOfLenghtVariableField($realI);
-					$format = sprintf("%%0%dd", $sizeLenght);
+					$sizeLength = $this->fieldsInfo->getSizeOfLengthVariableField($realI);
+					$format = sprintf("%%0%dd", $sizeLength);
 					$this->msg .= sprintf($format, strlen($msg));
 				}
 
@@ -426,7 +426,7 @@ class ISO8583
 			// Convert decimal value to binary string.
 			$tmpBinString = decbin($integerValue);
 
-			// Insert padding '0' to lenght to be equals to '8' (one byte).
+			// Insert padding '0' to length to be equals to '8' (one byte).
 			$finalBitmap .= str_pad($tmpBinString, 8, "0", STR_PAD_LEFT);
 
 		}
@@ -479,7 +479,7 @@ class ISO8583
 
 				if($this->fieldsInfo->isVariableField($realI))
 				{
-					$sizeQtyChar = $this->fieldsInfo->getSizeOfLenghtVariableField($realI);
+					$sizeQtyChar = $this->fieldsInfo->getSizeOfLengthVariableField($realI);
 					$sizeInt = (int) $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeQtyChar);
 
 					$value = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeInt);
@@ -487,7 +487,7 @@ class ISO8583
 				else
 				{
 					$fieldInfo = $this->fieldsInfo->getFieldInfo($realI);
-					$sizeInt = $fieldInfo["lenght"];
+					$sizeInt = $fieldInfo["length"];
 					$value = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeInt);
 				}
 

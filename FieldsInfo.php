@@ -27,9 +27,9 @@ class FieldsInfo
 	const __MIN                = "mm";  // Minute (01-59);
 	const __SS                 = "ss";  // Second (01-59);
 
-	const __LL                 = "LL";  // Lenght of variable data element (01-99);
-	const __LLL                = "LLL"; // Lenght of variable data element (001-999);
-	const __VAR                = "VAR"; // Variable lenght data element;
+	const __LL                 = "LL";  // Length of variable data element (01-99);
+	const __LLL                = "LLL"; // Length of variable data element (001-999);
+	const __VAR                = "VAR"; // Variable length data element;
 
 	const __YYMM               = self::__YY.self::__MM;
 	const __YYMMDD             = self::__YY.self::__MM.self::__DD;
@@ -40,15 +40,15 @@ class FieldsInfo
 	const __LLVAR              = self::__LL.self::__VAR;
 	const __LLLVAR             = self::__LLL.self::__VAR;
 
-	const VARIABLE_FIELD_FALSE = false; // Fixed lenght;
-	const VARIABLE_FIELD_TRUE  = true;  // Variable lenght up to maximun $fieldsInfo[$fieldNum]['lenght'] characters.
+	const VARIABLE_FIELD_FALSE = false; // Fixed length;
+	const VARIABLE_FIELD_TRUE  = true;  // Variable length up to maximun $fieldsInfo[$fieldNum]['length'] characters.
 
 	// NOTE:
-	// All vaiable lenght fields shall in addition contain two or three positions at the beginning of the data element
+	// All vaiable length fields shall in addition contain two or three positions at the beginning of the data element
 	// to identity the number of positions following to the end of that data element.
 
-	// All fixed lenght 'n' data elements are assumed to be right justified with leadinf zeroes.
-	// All other fixed lenght data elements are left justified with trailing spaces.
+	// All fixed length 'n' data elements are assumed to be right justified with leadinf zeroes.
+	// All other fixed length data elements are left justified with trailing spaces.
 	// In all 'b' data elements, blocks of 8 bits are assumed to be left justified with trailing zeros.
 	// All data elements are counted from left to right.
 
@@ -113,15 +113,15 @@ class FieldsInfo
 			$this->fieldsInfo = $this->getISO8583_1987();
 
 			// Adjust!
-			$this->fieldsInfo[1]["lenght"] = 16;
-			$this->fieldsInfo[52]["lenght"] = 16;
+			$this->fieldsInfo[1]["length"] = 16;
+			$this->fieldsInfo[52]["length"] = 16;
 		}
 		else if($isoVersion == self::ISO8583_1993)
 		{
 			$this->fieldsInfo = $this->getISO8583_1993();
 
 			// Adjust!
-			$this->fieldsInfo[1]["lenght"] = 16;
+			$this->fieldsInfo[1]["length"] = 16;
 		}
 		else if($isoVersion == self::ISO8583_2003)
 		{
@@ -138,9 +138,9 @@ class FieldsInfo
 
 	// Creates an array with one field information.
 	// Return an array with the info.
-	private static function mountFieldInfo(string $type, string $isVariableField, int $lenght, string $description, string $format = "")
+	private static function mountFieldInfo(string $type, string $isVariableField, int $length, string $description, string $format = "")
 	{
-		return array("type" => $type, "isVariableField" => $isVariableField, "lenght" => $lenght, "description" => $description, "format" => $format);
+		return array("type" => $type, "isVariableField" => $isVariableField, "length" => $length, "description" => $description, "format" => $format);
 	}
 
 	// Retrieve field information from fields array.
@@ -200,11 +200,11 @@ class FieldsInfo
 
 		if($fieldInfo && $valueLen > 0)
 		{
-			if($fieldInfo["isVariableField"] && $valueLen <= $fieldInfo["lenght"])
+			if($fieldInfo["isVariableField"] && $valueLen <= $fieldInfo["length"])
 			{
 				return true;
 			}
-			else if($valueLen == $fieldInfo["lenght"])
+			else if($valueLen == $fieldInfo["length"])
 			{
 				return true;
 			}
@@ -213,23 +213,23 @@ class FieldsInfo
 		return false;
 	}
 
-	// Check if field lenght is variable.
-	// Returns false if not or true if is a variable field lenght.
+	// Check if field length is variable.
+	// Returns false if not or true if is a variable field length.
 	public function isVariableField(int $field)
 	{
 		$fieldInfo = $this->getFieldInfo($field);
 		return ($fieldInfo["isVariableField"]);
 	}
 
-	// Retrieve the size of lenght of variable field.
+	// Retrieve the size of length of variable field.
 	// For field lengh 999 the result will be 3 (because 999 has 3 numeric digits).
-	// Returns false if informed field number is not a variable field or the size of field lenght if the informed field is valid.
-	public function getSizeOfLenghtVariableField(int $field)
+	// Returns false if informed field number is not a variable field or the size of field length if the informed field is valid.
+	public function getSizeOfLengthVariableField(int $field)
 	{
 		$fieldInfo = $this->getFieldInfo($field);
 		if($fieldInfo["isVariableField"])
 		{
-			return strlen($fieldInfo["lenght"]);
+			return strlen($fieldInfo["length"]);
 		}
 
 		return false;
@@ -268,7 +268,7 @@ class FieldsInfo
 
 			25  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   2, "point of sale condition code"),
 			26  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   2, "point of sale capture code"),
-			27  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   1, "authorization identification response lenght"),
+			27  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   1, "authorization identification response length"),
 			28  => self::mountFieldInfo(self::__XN,  self::VARIABLE_FIELD_FALSE,   8, "amount, transaction fee"),
 			29  => self::mountFieldInfo(self::__XN,  self::VARIABLE_FIELD_FALSE,   8, "amount, settlement fee"),
 			30  => self::mountFieldInfo(self::__XN,  self::VARIABLE_FIELD_FALSE,   8, "amount, transaction processing fee"),
@@ -418,7 +418,7 @@ class FieldsInfo
 
 			25  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   4, "message reason code"),
 			26  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   4, "card receptor business code"),
-			27  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   1, "approval code lenght"),
+			27  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   1, "approval code length"),
 			28  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   6, "date, reconciliation", self::__YYMMDD),
 			29  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,   3, "reconciliation indicator"),
 			30  => self::mountFieldInfo(self::__N,   self::VARIABLE_FIELD_FALSE,  24, "amount original"),
