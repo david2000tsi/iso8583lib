@@ -200,7 +200,7 @@ class FieldsInfo
 
 		if($fieldInfo && $valueLen > 0)
 		{
-			if($fieldInfo["isVariableField"])
+			if($fieldInfo["isVariableField"] && $valueLen <= $fieldInfo["lenght"])
 			{
 				return true;
 			}
