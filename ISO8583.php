@@ -185,10 +185,19 @@ class ISO8583
 
 	public function __construct($isoVersion)
 	{
-		// Enable additional debug messages.
-		Debug::getInstance()->enableDebug();
-
 		$this->init($isoVersion);
+	}
+
+	// Enable additional debug messages.
+	public function enableDebug()
+	{
+		Debug::getInstance()->enableDebug();
+	}
+
+	// Disable additional debug messages.
+	public function disableDebug()
+	{
+		Debug::getInstance()->disableDebug();
 	}
 
 	// Check instance status after call constructor.
