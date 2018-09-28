@@ -34,27 +34,27 @@ class Message0610 {
 		$this->field_127 = "";
 	}
 
-	public function setField003($value)	{ $this->field_003 = $value; }
-	public function setField004($value)	{ $this->field_004 = $value; }
-	public function setField007($value)	{ $this->field_007 = $value; }
-	public function setField011($value)	{ $this->field_011 = $value; }
-	public function setField012($value)	{ $this->field_012 = $value; }
-	public function setField013($value)	{ $this->field_013 = $value; }
-	public function setField039($value)	{ $this->field_039 = $value; }
-	public function setField041($value)	{ $this->field_041 = $value; }
-	public function setField042($value)	{ $this->field_042 = $value; }
-	public function setField127($value)	{ $this->field_127 = $value; }
+	public function setField003(string $value) { $this->field_003 = $value; }
+	public function setField004(string $value) { $this->field_004 = $value; }
+	public function setField007(string $value) { $this->field_007 = $value; }
+	public function setField011(string $value) { $this->field_011 = $value; }
+	public function setField012(string $value) { $this->field_012 = $value; }
+	public function setField013(string $value) { $this->field_013 = $value; }
+	public function setField039(string $value) { $this->field_039 = $value; }
+	public function setField041(string $value) { $this->field_041 = $value; }
+	public function setField042(string $value) { $this->field_042 = $value; }
+	public function setField127(string $value) { $this->field_127 = $value; }
 
-	public function getField003($value)	{ return $this->field_003; }
-	public function getField004($value)	{ return $this->field_004; }
-	public function getField007($value)	{ return $this->field_007; }
-	public function getField011($value)	{ return $this->field_011; }
-	public function getField012($value)	{ return $this->field_012; }
-	public function getField013($value)	{ return $this->field_013; }
-	public function getField039($value)	{ return $this->field_039; }
-	public function getField041($value)	{ return $this->field_041; }
-	public function getField042($value)	{ return $this->field_042; }
-	public function getField127($value)	{ return $this->field_127; }
+	public function getField003() { return $this->field_003; }
+	public function getField004() { return $this->field_004; }
+	public function getField007() { return $this->field_007; }
+	public function getField011() { return $this->field_011; }
+	public function getField012() { return $this->field_012; }
+	public function getField013() { return $this->field_013; }
+	public function getField039() { return $this->field_039; }
+	public function getField041() { return $this->field_041; }
+	public function getField042() { return $this->field_042; }
+	public function getField127() { return $this->field_127; }
 
 	public function getMessage()
 	{
@@ -82,7 +82,7 @@ class Message0610 {
 		return false;
 	}
 
-	public function decodeMessage($message)
+	public function decodeMessage(string $message)
 	{
 		$this->isoMsg->decodeMessage($message, ISO8583::ISO8583_1987);
 
