@@ -11,3 +11,17 @@ In command line (linux environment) run this command and analyse his output:
 ```
 php Example.php
 ```
+
+Run tests/* test file using phpunit to validate each message class:
+
+```
+cd tests/
+phpunit Message0200Test.php
+```
+
+To run all phpunit tests:
+
+```
+cd tests/
+phpunit .
+```
