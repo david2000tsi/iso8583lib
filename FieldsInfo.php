@@ -104,7 +104,7 @@ class FieldsInfo
 	private $mtiInfo;
 	private $fieldsInfo;
 
-	public function __construct($isoVersion)
+	public function __construct(string $isoVersion)
 	{
 		$this->fieldsInfo = [];
 

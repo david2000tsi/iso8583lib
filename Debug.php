@@ -21,7 +21,7 @@ class Debug {
 	}
 
 	// Print debug messages when it is enabled.
-	public function printDebug($msg)
+	public function printDebug(string $msg)
 	{
 		if(self::$isEnabled)
 		{
@@ -30,7 +30,7 @@ class Debug {
 	}
 
 	// Print debug messages all the time.
-	public function print($msg)
+	public function print(string $msg)
 	{
 		echo($msg);
 	}
