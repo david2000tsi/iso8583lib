@@ -165,7 +165,7 @@ class ISO8583
 	private $field_127;
 	private $field_128;
 
-	private function init($isoVersion)
+	private function init(string $isoVersion)
 	{
 		$this->mti = "";
 		$this->bitmap = "";
@@ -178,7 +178,7 @@ class ISO8583
 		{
 			for($i = 0; $i < FieldsInfo::NUM_FIELD_MAX; $i++)
 			{
-				$_field = self::getFieldVar($i + 1);
+				$_field = $this->getFieldVar($i + 1);
 				$this->$_field = "";
 
 				$this->bitmap .= "0";
@@ -186,7 +186,7 @@ class ISO8583
 		}
 	}
 
-	public function __construct($isoVersion)
+	public function __construct(string $isoVersion)
 	{
 		$this->init($isoVersion);
 	}
@@ -213,7 +213,7 @@ class ISO8583
 	// Get internal field variable name.
 	private function getFieldVar(int $field)
 	{
-		return sprintf('$field_%03d', $field);
+		return sprintf("field_%03d", $field);
 	}
 
 	// Update the bitmap according informed field number.
@@ -302,7 +302,7 @@ class ISO8583
 	{
 		if($this->fieldsInfo->isValidField($field))
 		{
-			$_field = self::getFieldVar($field);
+			$_field = $this->getFieldVar($field);
 			return $this->$_field;
 		}
 		return false;
@@ -313,7 +313,7 @@ class ISO8583
 	{
 		if($this->fieldsInfo->isValidFieldValue($field, $value))
 		{
-			$_field = self::getFieldVar($field);
+			$_field = $this->getFieldVar($field);
 			$this->$_field = $value;
 
 			$this->updateBitmap($field);
@@ -330,7 +330,7 @@ class ISO8583
 	{
 		if($this->fieldsInfo->isValidField($field))
 		{
-			$_field = self::getFieldVar($field);
+			$_field = $this->getFieldVar($field);
 			$this->$_field = "";
 
 			$this->updateBitmap($field, false);
@@ -359,7 +359,7 @@ class ISO8583
 		// If there is secondary bitmap soh we will also copy it to message (more 16 bytes, replacing field 001).
 		if($this->bitmap[0])
 		{
-			$this->addField(1, $this->getSecondaryBitmap());
+			$this->field_001 = $this->getSecondaryBitmap();
 		}
 
 		// Lets go to read all fields...
@@ -381,10 +381,10 @@ class ISO8583
 			}
 		}
 
-		Debug::getInstance()->printDebug("Message (".strlen($this->msg)."): [".$this->msg."]\n");
-
 		// Converting lowercase chars to uppercase...
 		$this->msg = strtoupper($this->msg);
+
+		Debug::getInstance()->printDebug("Message (".strlen($this->msg)."): [".$this->msg."]\n");
 
 		return $this->msg;
 	}
@@ -402,7 +402,7 @@ class ISO8583
 		return $newString;
 	}
 
-	private function restoreBitmapFromHexString($bitmap)
+	private function restoreBitmapFromHexString(string $bitmap)
 	{
 		$finalBitmap = "";
 
@@ -440,7 +440,7 @@ class ISO8583
 		return $finalBitmap;
 	}
 
-	public function decodeMessage(string $isoMsg, $isoVersion)
+	public function decodeMessage(string $isoMsg, string $isoVersion)
 	{
 		$fieldsIsoMsg = 0;
 
@@ -448,6 +448,9 @@ class ISO8583
 		{
 			return false;
 		}
+
+		// Converting lowercase chars to uppercase...
+		$isoMsg = strtoupper($isoMsg);
 
 		$this->init($isoVersion);
 
@@ -480,7 +483,7 @@ class ISO8583
 			if($this->bitmap[$i])
 			{
 				$realI = $i + 1;
-				$_field = self::getFieldVar($realI);
+				$_field = $this->getFieldVar($realI);
 				$value = "";
 
 				if($this->fieldsInfo->isVariableField($realI))
