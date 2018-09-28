@@ -213,7 +213,7 @@ class ISO8583
 	// Get internal field variable name.
 	private function getFieldVar(int $field)
 	{
-		return sprintf('$field_%03d', $field);
+		return sprintf("field_%03d", $field);
 	}
 
 	// Update the bitmap according informed field number.
@@ -359,7 +359,7 @@ class ISO8583
 		// If there is secondary bitmap soh we will also copy it to message (more 16 bytes, replacing field 001).
 		if($this->bitmap[0])
 		{
-			$this->addField(1, $this->getSecondaryBitmap());
+			$this->field_001 = $this->getSecondaryBitmap();
 		}
 
 		// Lets go to read all fields...
