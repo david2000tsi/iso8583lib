@@ -165,6 +165,7 @@ class ISO8583
 	private $field_127;
 	private $field_128;
 
+	// Initialize internal variables.
 	private function init(string $isoVersion)
 	{
 		$this->mti = "";
@@ -184,11 +185,28 @@ class ISO8583
 				$this->bitmap .= "0";
 			}
 		}
+		else
+		{
+			Debug::getInstance()->printDebug("Failure, init() call.\n");
+		}
 	}
 
-	public function __construct(string $isoVersion)
+	// Class conostructor.
+	// To create an instance (to fill and generate a message) you should be pass a valid $isoVersion.
+	// To decode a message the $isoMsg should be passed!
+	public function __construct(string $isoVersion, string $isoMsg = "")
 	{
-		$this->init($isoVersion);
+		if(empty($isoMsg))
+		{
+			$this->init($isoVersion);
+		}
+		else
+		{
+			$decodeRes = $this->decodeMessage($isoVersion, $isoMsg);
+
+			// Set manually success variable to sinalize decode success.
+			$this->success = $decodeRes;
+		}
 	}
 
 	// Enable additional debug messages.
@@ -390,11 +408,20 @@ class ISO8583
 	}
 
 	// Returns a substring from original removing it from original string.
-	private function getStringFromBeginningAndCleanFromOriginalString(string &$originalString, int $lenToRecovery)
+	private function getStringFromBeginningAndCleanFromOriginalString(string &$originalString, int $lenToRecovery, bool $getAvailableCaseOverflow = true)
 	{
-		if(strlen($originalString) < $lenToRecovery)
+		$originalStringLen = strlen($originalString);
+
+		if($originalStringLen < $lenToRecovery)
 		{
-			return false;
+			if($getAvailableCaseOverflow)
+			{
+				$lenToRecovery = $originalStringLen;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		$newString = substr($originalString, 0, $lenToRecovery); // Recovery substring from original string.
@@ -440,12 +467,25 @@ class ISO8583
 		return $finalBitmap;
 	}
 
-	public function decodeMessage(string $isoMsg, string $isoVersion)
+	// Check if bitmap is valid, basically verify his length (each bitmap, 16 bytes hex string).
+	// Returns false if not or true if is a valid bitmap.
+	private function isValidBitmapHexString(string $bitmap)
+	{
+		return (strlen($bitmap) == 16);
+	}
+
+	// Decode the passed message.
+	// Return false if the message is invalid.
+	// Return true case success, the internal variables will be filled by message data.
+	public function decodeMessage(string $isoVersion, string $isoMsg)
 	{
 		$fieldsIsoMsg = 0;
+		$i = 0;
+		$minimalIsoMsgLen64 = (4 + 16); // MTI + Primary bitmap.
 
-		if(empty($isoMsg))
+		if(empty($isoMsg) || strlen($isoMsg) < $minimalIsoMsgLen64)
 		{
+			Debug::getInstance()->printDebug("Invalid ISO message...\n");
 			return false;
 		}
 
@@ -454,13 +494,28 @@ class ISO8583
 
 		$this->init($isoVersion);
 
-		Debug::getInstance()->printDebug("Decoding ISO message...\n");
+		if(!$this->success)
+		{
+			return false;
+		}
 
+		Debug::getInstance()->printDebug("Decoding ISO message...\n");
 		$this->mti = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, 4);
+		if(!$this->fieldsInfo->isValidMti($this->mti))
+		{
+			Debug::getInstance()->printDebug("Invalid Mti -> ".$this->mti."\n");
+			return false;
+		}
 
 		Debug::getInstance()->printDebug("Mti -> ".$this->mti."\n");
 
 		$primaryBitmap = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, 16);
+		if(!$this->isValidBitmapHexString($primaryBitmap))
+		{
+			Debug::getInstance()->printDebug("Invalid primary bitmap -> ".$primaryBitmap."\n");
+			return false;
+		}
+
 		$this->bitmap = $this->restoreBitmapFromHexString($primaryBitmap);
 		$fieldsIsoMsg = FieldsInfo::BITMAP_LEN_BITS;
 
@@ -470,6 +525,12 @@ class ISO8583
 		if($this->bitmap[0])
 		{
 			$secondaryBitmap = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, 16);
+			if(!$this->isValidBitmapHexString($secondaryBitmap))
+			{
+				Debug::getInstance()->printDebug("Invalid secondary bitmap -> ".$secondaryBitmap."\n");
+				return false;
+			}
+
 			$this->bitmap .= $this->restoreBitmapFromHexString($secondaryBitmap);
 			$this->field_001 = $secondaryBitmap;
 			$fieldsIsoMsg = FieldsInfo::NUM_FIELD_MAX;
@@ -482,15 +543,21 @@ class ISO8583
 		{
 			if($this->bitmap[$i])
 			{
+				// Has data in bitmap but has not enough data in the message.
+				if(strlen($isoMsg) == 0)
+				{
+					break;
+				}
+
 				$realI = $i + 1;
 				$_field = $this->getFieldVar($realI);
+				$sizeInt = 0;
 				$value = "";
 
 				if($this->fieldsInfo->isVariableField($realI))
 				{
 					$sizeQtyChar = $this->fieldsInfo->getSizeOfLengthVariableField($realI);
 					$sizeInt = (int) $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeQtyChar);
-
 					$value = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeInt);
 				}
 				else
@@ -501,8 +568,24 @@ class ISO8583
 				}
 
 				$this->$_field = $value;
-				Debug::getInstance()->printDebug($_field." -> ".$this->$_field."\n");
+
+				// Validate length.
+				$fieldRecoveredLen = strlen($this->$_field);
+				if($sizeInt != $fieldRecoveredLen)
+				{
+					Debug::getInstance()->printDebug($_field." -> Warning, bad ISO field: expected [".$sizeInt."] but got [".$fieldRecoveredLen."]! -> ".$this->$_field."\n");
+				}
+				else
+				{
+					Debug::getInstance()->printDebug($_field." -> ".$this->$_field."\n");
+				}
 			}
+		}
+
+		if($i != $fieldsIsoMsg)
+		{
+			Debug::getInstance()->printDebug("Failure, ISO message soo short!\n");
+			return false;
 		}
 
 		Debug::getInstance()->printDebug("Decoded (".$fieldsIsoMsg." fields ISO message)!\n");
