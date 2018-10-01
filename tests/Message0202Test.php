@@ -30,5 +30,14 @@ class Message0202Test extends PHPUnit_Framework_TestCase{
 		$this->assertTrue($this->generated0202Msg !== false);
 
 		$this->assertEquals($this->original0202, $this->generated0202Msg);
+
+		$this->iso0202Instance = null;
+
+		$this->iso0202Instance = new Message0202($this->generated0202Msg);
+		$this->assertTrue($this->iso0202Instance->success());
+
+		$this->assertEquals($this->iso0202Instance->getField003(), "003000");
+		$this->assertEquals($this->iso0202Instance->getField004(), "000000000010");
+		$this->assertEquals($this->iso0202Instance->getField007(), "1107123000");
 	}
 }

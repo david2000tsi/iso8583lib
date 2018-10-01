@@ -28,5 +28,14 @@ class Message0810Test extends PHPUnit_Framework_TestCase{
 		$this->assertTrue($this->generated0810Msg !== false);
 
 		$this->assertEquals($this->original0810, $this->generated0810Msg);
+
+		$this->iso0810Instance = null;
+
+		$this->iso0810Instance = new Message0810($this->generated0810Msg);
+		$this->assertTrue($this->iso0810Instance->success());
+
+		$this->assertEquals($this->iso0810Instance->getField007(), "0717123000");
+		$this->assertEquals($this->iso0810Instance->getField011(), "999999");
+		$this->assertEquals($this->iso0810Instance->getField012(), "123000");
 	}
 }
