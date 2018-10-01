@@ -35,5 +35,14 @@ class Message0200Test extends PHPUnit_Framework_TestCase{
 		$this->assertTrue($this->generated0200Msg !== false);
 
 		$this->assertEquals($this->original0200, $this->generated0200Msg);
+
+		$this->iso0200Instance = null;
+
+		$this->iso0200Instance = new Message0200($this->generated0200Msg);
+		$this->assertTrue($this->iso0200Instance->success());
+
+		$this->assertEquals($this->iso0200Instance->getField002(), "1008950013090478");
+		$this->assertEquals($this->iso0200Instance->getField003(), "003000");
+		$this->assertEquals($this->iso0200Instance->getField007(), "1107123000");
 	}
 }

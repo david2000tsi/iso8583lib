@@ -30,5 +30,14 @@ class Message0420Test extends PHPUnit_Framework_TestCase{
 		$this->assertTrue($this->generated0420Msg !== false);
 
 		$this->assertEquals($this->original0420, $this->generated0420Msg);
+
+		$this->iso0420Instance = null;
+
+		$this->iso0420Instance = new Message0420($this->generated0420Msg);
+		$this->assertTrue($this->iso0420Instance->success());
+
+		$this->assertEquals($this->iso0420Instance->getField002(), "1008950013090478");
+		$this->assertEquals($this->iso0420Instance->getField003(), "003000");
+		$this->assertEquals($this->iso0420Instance->getField007(), "1107123000");
 	}
 }

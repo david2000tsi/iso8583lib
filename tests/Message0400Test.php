@@ -35,5 +35,14 @@ class Message0400Test extends PHPUnit_Framework_TestCase{
 		$this->assertTrue($this->generated0400Msg !== false);
 
 		$this->assertEquals($this->original0400, $this->generated0400Msg);
+
+		$this->iso0400Instance = null;
+
+		$this->iso0400Instance = new Message0400($this->generated0400Msg);
+		$this->assertTrue($this->iso0400Instance->success());
+
+		$this->assertEquals($this->iso0400Instance->getField002(), "1008950013090478");
+		$this->assertEquals($this->iso0400Instance->getField003(), "003000");
+		$this->assertEquals($this->iso0400Instance->getField007(), "1107123000");
 	}
 }
