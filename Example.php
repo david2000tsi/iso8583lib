@@ -27,13 +27,25 @@ $iso->addField(76, "0987654321");
 $iso->addField(95, "777437294863654765689476984987564264363567");
 
 $msgIso = $iso->generateMessage();
+$iso = null;
 
 echo("\nDecode testing:\n");
 
-$iso->decodeMessage($msgIso, ISO8583::ISO8583_1987);
-echo("\n");
-echo("Field 10: ".$iso->getField(10)."\n");
-echo("Field 34: ".$iso->getField(34)."\n");
-echo("Field 50: ".$iso->getField(50)."\n");
-echo("Field 76: ".$iso->getField(76)."\n");
-echo("Field 95: ".$iso->getField(95)."\n");
+
+// Handle message length (for tests).
+$msgIso = substr($msgIso, 0, strlen($msgIso));
+
+$iso = new ISO8583(ISO8583::ISO8583_1987, $msgIso);
+if($iso->success())
+{
+	echo("\n");
+	echo("Field 10: ".$iso->getField(10)."\n");
+	echo("Field 34: ".$iso->getField(34)."\n");
+	echo("Field 50: ".$iso->getField(50)."\n");
+	echo("Field 76: ".$iso->getField(76)."\n");
+	echo("Field 95: ".$iso->getField(95)."\n");
+}
+else
+{
+	echo("Failure!\n");
+}

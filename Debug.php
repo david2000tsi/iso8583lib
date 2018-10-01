@@ -1,6 +1,7 @@
 <?php
 
-class Debug {
+class Debug
+{
 	private static $instance;
 	private static $isEnabled;
 
