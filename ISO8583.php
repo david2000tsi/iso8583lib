@@ -1,7 +1,7 @@
 <?php
 
-require_once('FieldsInfo.php');
-require_once('Debug.php');
+require_once(__DIR__.'/FieldsInfo.php');
+require_once(__DIR__.'/Debug.php');
 
 class ISO8583
 {
