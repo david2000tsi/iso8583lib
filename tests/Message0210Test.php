@@ -1,6 +1,6 @@
 <?php
 
-require_once('../messages/Message0210.php');
+require_once(__DIR__.'/../messages/Message0210.php');
 
 class Message0210Test extends PHPUnit_Framework_TestCase{
 	private $original0210Msg;

@@ -1,7 +1,7 @@
 <?php
 
-require_once('../ISO8583.php');
-require_once('Message.php');
+require_once(__DIR__.'/Message.php');
+require_once(__DIR__.'/../ISO8583.php');
 
 class Message0100 extends Message
 {
