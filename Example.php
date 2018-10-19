@@ -17,12 +17,16 @@ class Example
 
 		self::$isoInstance->enableDebug();
 
+		echo("Debug ".(self::$isoInstance->isEnabledDebug() ? "enabled" : "disabled")."!\n");
+		echo("Auto padding ".(self::$isoInstance->isEnabledAutoPadding() ? "enabled" : "disabled")."!\n");
+
 		echo("Generate testing:\n");
 
 		self::$isoInstance->setMti("0200");
 		self::$isoInstance->addField( 2, "9999999999999999999");
 		self::$isoInstance->addField( 4, "123456789012");
-		self::$isoInstance->addField(10, "88888888");
+		self::$isoInstance->addField(10, "10");
+		self::$isoInstance->addField(22, "12");
 		self::$isoInstance->addField(31, "11111111");
 		self::$isoInstance->addField(32, "7777777");
 		self::$isoInstance->addField(34, "947654652576423534875345");
@@ -44,9 +48,16 @@ class Example
 		if(self::$isoInstance->success())
 		{
 			echo("\n");
+			echo("Field 02: ".self::$isoInstance->getField( 2)."\n");
+			echo("Field 04: ".self::$isoInstance->getField( 4)."\n");
 			echo("Field 10: ".self::$isoInstance->getField(10)."\n");
+			echo("Field 22: ".self::$isoInstance->getField(22)."\n");
+			echo("Field 31: ".self::$isoInstance->getField(31)."\n");
+			echo("Field 32: ".self::$isoInstance->getField(32)."\n");
 			echo("Field 34: ".self::$isoInstance->getField(34)."\n");
+			echo("Field 36: ".self::$isoInstance->getField(36)."\n");
 			echo("Field 50: ".self::$isoInstance->getField(50)."\n");
+			echo("Field 72: ".self::$isoInstance->getField(72)."\n");
 			echo("Field 76: ".self::$isoInstance->getField(76)."\n");
 			echo("Field 95: ".self::$isoInstance->getField(95)."\n");
 		}

@@ -47,7 +47,7 @@ class FieldsInfo
 	// All vaiable length fields shall in addition contain two or three positions at the beginning of the data element
 	// to identity the number of positions following to the end of that data element.
 
-	// All fixed length 'n' data elements are assumed to be right justified with leadinf zeroes.
+	// All fixed length 'n' (self::__N) data elements are assumed to be right justified with leadinf zeroes.
 	// All other fixed length data elements are left justified with trailing spaces.
 	// In all 'b' data elements, blocks of 8 bits are assumed to be left justified with trailing zeros.
 	// All data elements are counted from left to right.
