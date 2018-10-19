@@ -21,6 +21,8 @@ class ISO8583
 	private $fieldsInfo;
 	// Auto padding flag.
 	private $autoPadding;
+	// Check fields value content flag.
+	private $checkFieldValueContent;
 	// Success flag.
 	private $success;
 
@@ -190,6 +192,9 @@ class ISO8583
 
 			// Set auto padding true as default.
 			$this->autoPadding = true;
+
+			// Set check field value content false as default.
+			$this->checkFieldValueContent = false;
 		}
 		else
 		{
@@ -251,6 +256,25 @@ class ISO8583
 	public function isEnabledAutoPadding()
 	{
 		return $this->autoPadding;
+	}
+
+	// Enable check field value content.
+	// When it is enabled, the function $this->addField() will be check the $value content according FieldsInfo table description.
+	public function enableCheckFieldValueContent()
+	{
+		$this->checkFieldValueContent = true;
+	}
+
+	// Disable check field value content.
+	public function disableCheckFieldValueContent()
+	{
+		$this->checkFieldValueContent = false;
+	}
+
+	// Return check field value content current state.
+	public function isEnabledCheckFieldValueContent()
+	{
+		return $this->checkFieldValueContent;
 	}
 
 	// Check instance status after call constructor.
@@ -366,7 +390,7 @@ class ISO8583
 			$this->insertPadding($field, $value);
 		}
 
-		if($this->fieldsInfo->isValidFieldValue($field, $value))
+		if($this->fieldsInfo->isValidFieldValue($field, $value, $this->checkFieldValueContent))
 		{
 			$_field = $this->getFieldVar($field);
 			$this->$_field = $value;

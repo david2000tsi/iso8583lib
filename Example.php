@@ -19,6 +19,7 @@ class Example
 
 		echo("Debug ".(self::$isoInstance->isEnabledDebug() ? "enabled" : "disabled")."!\n");
 		echo("Auto padding ".(self::$isoInstance->isEnabledAutoPadding() ? "enabled" : "disabled")."!\n");
+		echo("Check field value content ".(self::$isoInstance->isEnabledCheckFieldValueContent() ? "enabled" : "disabled")."!\n");
 
 		echo("Generate testing:\n");
 
