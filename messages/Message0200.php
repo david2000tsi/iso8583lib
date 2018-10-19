@@ -20,22 +20,22 @@ class Message0200 extends Message
 		}
 	}
 
-	public function setField002(string $value) { $this->isoInstance->addField( 2, $value); }
-	public function setField003(string $value) { $this->isoInstance->addField( 3, $value); }
-	public function setField004(string $value) { $this->isoInstance->addField( 4, $value); }
-	public function setField007(string $value) { $this->isoInstance->addField( 7, $value); }
-	public function setField011(string $value) { $this->isoInstance->addField(11, $value); }
-	public function setField012(string $value) { $this->isoInstance->addField(12, $value); }
-	public function setField013(string $value) { $this->isoInstance->addField(13, $value); }
-	public function setField014(string $value) { $this->isoInstance->addField(14, $value); }
-	public function setField022(string $value) { $this->isoInstance->addField(22, $value); }
-	public function setField041(string $value) { $this->isoInstance->addField(41, $value); }
-	public function setField042(string $value) { $this->isoInstance->addField(42, $value); }
-	public function setField048(string $value) { $this->isoInstance->addField(48, $value); }
-	public function setField052(string $value) { $this->isoInstance->addField(52, $value); }
-	public function setField061(string $value) { $this->isoInstance->addField(61, $value); }
-	public function setField062(string $value) { $this->isoInstance->addField(62, $value); }
-	public function setField063(string $value) { $this->isoInstance->addField(63, $value); }
+	public function setField002(string $value) { return $this->isoInstance->addField( 2, $value); }
+	public function setField003(string $value) { return $this->isoInstance->addField( 3, $value); }
+	public function setField004(string $value) { return $this->isoInstance->addField( 4, $value); }
+	public function setField007(string $value) { return $this->isoInstance->addField( 7, $value); }
+	public function setField011(string $value) { return $this->isoInstance->addField(11, $value); }
+	public function setField012(string $value) { return $this->isoInstance->addField(12, $value); }
+	public function setField013(string $value) { return $this->isoInstance->addField(13, $value); }
+	public function setField014(string $value) { return $this->isoInstance->addField(14, $value); }
+	public function setField022(string $value) { return $this->isoInstance->addField(22, $value); }
+	public function setField041(string $value) { return $this->isoInstance->addField(41, $value); }
+	public function setField042(string $value) { return $this->isoInstance->addField(42, $value); }
+	public function setField048(string $value) { return $this->isoInstance->addField(48, $value); }
+	public function setField052(string $value) { return $this->isoInstance->addField(52, $value); }
+	public function setField061(string $value) { return $this->isoInstance->addField(61, $value); }
+	public function setField062(string $value) { return $this->isoInstance->addField(62, $value); }
+	public function setField063(string $value) { return $this->isoInstance->addField(63, $value); }
 
 	public function getField002() { return $this->isoInstance->getField( 2); }
 	public function getField003() { return $this->isoInstance->getField( 3); }

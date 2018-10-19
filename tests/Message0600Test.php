@@ -13,15 +13,15 @@ class Message0600Test extends PHPUnit_Framework_TestCase{
 
 		$this->iso0600Instance = new Message0600();
 
-		$this->iso0600Instance->setField003("003000");
-		$this->iso0600Instance->setField004("453632453465");
-		$this->iso0600Instance->setField007("1107123000");
-		$this->iso0600Instance->setField011("456346");
-		$this->iso0600Instance->setField012("123000");
-		$this->iso0600Instance->setField013("2150");
-		$this->iso0600Instance->setField041("41414141");
-		$this->iso0600Instance->setField042("243654364564564");
-		$this->iso0600Instance->setField127("012345678");
+		$this->assertTrue($this->iso0600Instance->setField003("003000"));
+		$this->assertTrue($this->iso0600Instance->setField004("453632453465"));
+		$this->assertTrue($this->iso0600Instance->setField007("1107123000"));
+		$this->assertTrue($this->iso0600Instance->setField011("456346"));
+		$this->assertTrue($this->iso0600Instance->setField012("123000"));
+		$this->assertTrue($this->iso0600Instance->setField013("2150"));
+		$this->assertTrue($this->iso0600Instance->setField041("41414141"));
+		$this->assertTrue($this->iso0600Instance->setField042("243654364564564"));
+		$this->assertTrue($this->iso0600Instance->setField127("012345678"));
 
 		$this->generated0600Msg = $this->iso0600Instance->getMessage();
 

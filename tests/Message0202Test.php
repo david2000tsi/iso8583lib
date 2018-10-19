@@ -13,17 +13,17 @@ class Message0202Test extends PHPUnit_Framework_TestCase{
 
 		$this->iso0202Instance = new Message0202();
 
-		$this->iso0202Instance->setField003("003000");
-		$this->iso0202Instance->setField004("000000000010");
-		$this->iso0202Instance->setField007("1107123000");
-		$this->iso0202Instance->setField011("270003");
-		$this->iso0202Instance->setField012("123000");
-		$this->iso0202Instance->setField013("0711");
-		$this->iso0202Instance->setField039("00");
-		$this->iso0202Instance->setField041("00667788");
-		$this->iso0202Instance->setField042("000000030000003");
-		$this->iso0202Instance->setField062("0000000000123456");
-		$this->iso0202Instance->setField127("787878");
+		$this->assertTrue($this->iso0202Instance->setField003("003000"));
+		$this->assertTrue($this->iso0202Instance->setField004("000000000010"));
+		$this->assertTrue($this->iso0202Instance->setField007("1107123000"));
+		$this->assertTrue($this->iso0202Instance->setField011("270003"));
+		$this->assertTrue($this->iso0202Instance->setField012("123000"));
+		$this->assertTrue($this->iso0202Instance->setField013("0711"));
+		$this->assertTrue($this->iso0202Instance->setField039("00"));
+		$this->assertTrue($this->iso0202Instance->setField041("00667788"));
+		$this->assertTrue($this->iso0202Instance->setField042("000000030000003"));
+		$this->assertTrue($this->iso0202Instance->setField062("0000000000123456"));
+		$this->assertTrue($this->iso0202Instance->setField127("787878"));
 
 		$this->generated0202Msg = $this->iso0202Instance->getMessage();
 

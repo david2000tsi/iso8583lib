@@ -13,22 +13,22 @@ class Message0400Test extends PHPUnit_Framework_TestCase{
 
 		$this->iso0400Instance = new Message0400();
 
-		$this->iso0400Instance->setField002("1008950013090478");
-		$this->iso0400Instance->setField003("003000");
-		$this->iso0400Instance->setField004("000000000010");
-		$this->iso0400Instance->setField007("1107123000");
-		$this->iso0400Instance->setField011("270003");
-		$this->iso0400Instance->setField012("123000");
-		$this->iso0400Instance->setField013("0711");
-		$this->iso0400Instance->setField022("021");
-		$this->iso0400Instance->setField041("00667788");
-		$this->iso0400Instance->setField042("000000030000003");
-		$this->iso0400Instance->setField048("01012001259102030");
-		$this->iso0400Instance->setField052("0000000000123456");
-		$this->iso0400Instance->setField061("88844FD0");
-		$this->iso0400Instance->setField063("0123456789ABCDEF");
-		$this->iso0400Instance->setField090("000000000000000000000000009999999999999999");
-		$this->iso0400Instance->setField125("125125125125");
+		$this->assertTrue($this->iso0400Instance->setField002("1008950013090478"));
+		$this->assertTrue($this->iso0400Instance->setField003("003000"));
+		$this->assertTrue($this->iso0400Instance->setField004("000000000010"));
+		$this->assertTrue($this->iso0400Instance->setField007("1107123000"));
+		$this->assertTrue($this->iso0400Instance->setField011("270003"));
+		$this->assertTrue($this->iso0400Instance->setField012("123000"));
+		$this->assertTrue($this->iso0400Instance->setField013("0711"));
+		$this->assertTrue($this->iso0400Instance->setField022("021"));
+		$this->assertTrue($this->iso0400Instance->setField041("00667788"));
+		$this->assertTrue($this->iso0400Instance->setField042("000000030000003"));
+		$this->assertTrue($this->iso0400Instance->setField048("01012001259102030"));
+		$this->assertTrue($this->iso0400Instance->setField052("0000000000123456"));
+		$this->assertTrue($this->iso0400Instance->setField061("88844FD0"));
+		$this->assertTrue($this->iso0400Instance->setField063("0123456789ABCDEF"));
+		$this->assertTrue($this->iso0400Instance->setField090("000000000000000000000000009999999999999999"));
+		$this->assertTrue($this->iso0400Instance->setField125("125125125125"));
 
 		$this->generated0400Msg = $this->iso0400Instance->getMessage();
 
