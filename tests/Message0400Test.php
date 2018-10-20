@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../messages/Message0400.php');
+require_once(__DIR__.'/../vendor/autoload.php');
 
 class Message0400Test extends PHPUnit_Framework_TestCase{
 	private $original0400Msg;

@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/ISO8583.php');
+require_once(__DIR__.'/../vendor/autoload.php');
 
 class Example
 {

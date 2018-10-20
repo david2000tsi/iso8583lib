@@ -1,7 +1,6 @@
 <?php
 
-require_once(__DIR__.'/FieldsInfo.php');
-require_once(__DIR__.'/Debug.php');
+require_once(__DIR__.'/../vendor/autoload.php');
 
 class ISO8583
 {
