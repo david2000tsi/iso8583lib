@@ -19,6 +19,11 @@ class ISO8583
 
 	// Internal fields info instance.
 	private $fieldsInfo;
+	// Auto padding flag.
+	private $autoPadding;
+	// Check fields value content flag.
+	private $checkFieldValueContent;
+	// Success flag.
 	private $success;
 
 	private $field_001; // Used as second bitmap.
@@ -184,6 +189,12 @@ class ISO8583
 
 				$this->bitmap .= "0";
 			}
+
+			// Set auto padding true as default.
+			$this->autoPadding = true;
+
+			// Set check field value content false as default.
+			$this->checkFieldValueContent = false;
 		}
 		else
 		{
@@ -191,7 +202,7 @@ class ISO8583
 		}
 	}
 
-	// Class conostructor.
+	// Class constructor.
 	// To create an instance (to fill and generate a message) you should be pass a valid $isoVersion.
 	// To decode a message the $isoMsg should be passed!
 	public function __construct(string $isoVersion, string $isoMsg = "")
@@ -219,6 +230,51 @@ class ISO8583
 	public function disableDebug()
 	{
 		Debug::getInstance()->disableDebug();
+	}
+
+	// Return debug current state.
+	public function isEnabledDebug()
+	{
+		return Debug::getInstance()->isEnabledDebug();
+	}
+
+	// Enable auto padding according fields type. Set true as default.
+	// When this option is enabled you can pass values with different lengths for fixed fields length, the module will be insert padding automatically.
+	// When disabled you should be pass value with corrent length or will be occurrs an error.
+	public function enableAutoPadding()
+	{
+		$this->autoPadding = true;
+	}
+
+	// Disable auto padding.
+	public function disableAutoPadding()
+	{
+		$this->autoPadding = false;
+	}
+
+	// Return auto padding current state.
+	public function isEnabledAutoPadding()
+	{
+		return $this->autoPadding;
+	}
+
+	// Enable check field value content.
+	// When it is enabled, the function $this->addField() will be check the $value content according FieldsInfo table description.
+	public function enableCheckFieldValueContent()
+	{
+		$this->checkFieldValueContent = true;
+	}
+
+	// Disable check field value content.
+	public function disableCheckFieldValueContent()
+	{
+		$this->checkFieldValueContent = false;
+	}
+
+	// Return check field value content current state.
+	public function isEnabledCheckFieldValueContent()
+	{
+		return $this->checkFieldValueContent;
 	}
 
 	// Check instance status after call constructor.
@@ -329,7 +385,12 @@ class ISO8583
 	// Set field.
 	public function addField(int $field, string $value)
 	{
-		if($this->fieldsInfo->isValidFieldValue($field, $value))
+		if($this->fieldsInfo->isValidField($field) && $this->autoPadding)
+		{
+			$this->insertPadding($field, $value);
+		}
+
+		if($this->fieldsInfo->isValidFieldValue($field, $value, $this->checkFieldValueContent))
 		{
 			$_field = $this->getFieldVar($field);
 			$this->$_field = $value;
@@ -358,6 +419,44 @@ class ISO8583
 		}
 
 		Debug::getInstance()->printDebug(":field_".$field." -> ".$value.", removed!\n");
+		return false;
+	}
+
+	// Insert padding according field info.
+	// Case the field has fixed length this function insert padding according field type.
+	// This function only will be called (by other) when the auto padding option is enabled.
+	private function insertPadding(int $field, string &$value)
+	{
+		$valueLength = strlen($value);
+		if(!$this->fieldsInfo->isValidField($field) || $valueLength == 0)
+		{
+			return false;
+		}
+
+		$fieldInfo = $this->fieldsInfo->getFieldInfo($field);
+
+		if($fieldInfo["length"] < $valueLength)
+		{
+			return false;
+		}
+
+		if(!$fieldInfo["isVariableField"])
+		{
+			switch($fieldInfo["type"])
+			{
+				case FieldsInfo::__N:
+				case FieldsInfo::__AN:
+				case FieldsInfo::__NS:
+				case FieldsInfo::__ANP:
+				case FieldsInfo::__ANS:
+					$value = str_pad($value, $fieldInfo["length"], '0', STR_PAD_LEFT);
+					break;
+				default:
+					$value = str_pad($value, $fieldInfo["length"], ' ', STR_PAD_RIGHT);
+					break;
+			}
+			return true;
+		}
 		return false;
 	}
 

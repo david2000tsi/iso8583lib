@@ -20,13 +20,13 @@ class Message0800 extends Message
 		}
 	}
 
-	public function setField007(string $value) { $this->isoInstance->addField( 7, $value); }
-	public function setField011(string $value) { $this->isoInstance->addField(11, $value); }
-	public function setField012(string $value) { $this->isoInstance->addField(12, $value); }
-	public function setField013(string $value) { $this->isoInstance->addField(13, $value); }
-	public function setField041(string $value) { $this->isoInstance->addField(41, $value); }
-	public function setField042(string $value) { $this->isoInstance->addField(42, $value); }
-	public function setField070(string $value) { $this->isoInstance->addField(70, $value); }
+	public function setField007(string $value) { return $this->isoInstance->addField( 7, $value); }
+	public function setField011(string $value) { return $this->isoInstance->addField(11, $value); }
+	public function setField012(string $value) { return $this->isoInstance->addField(12, $value); }
+	public function setField013(string $value) { return $this->isoInstance->addField(13, $value); }
+	public function setField041(string $value) { return $this->isoInstance->addField(41, $value); }
+	public function setField042(string $value) { return $this->isoInstance->addField(42, $value); }
+	public function setField070(string $value) { return $this->isoInstance->addField(70, $value); }
 
 	public function getField007() { return $this->isoInstance->getField( 7); }
 	public function getField011() { return $this->isoInstance->getField(11); }

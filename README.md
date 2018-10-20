@@ -16,7 +16,9 @@ Run tests/* test file using phpunit to validate each message class:
 
 ```
 cd tests/
+phpunit Message0100Test.php
 phpunit Message0200Test.php
+...
 ```
 
 To run all phpunit tests:

@@ -47,4 +47,10 @@ class Debug
 	{
 		self::$isEnabled = false;
 	}
+
+	// Return debug current state.
+	public function isEnabledDebug()
+	{
+		return self::$isEnabled;
+	}
 }

@@ -47,7 +47,7 @@ class FieldsInfo
 	// All vaiable length fields shall in addition contain two or three positions at the beginning of the data element
 	// to identity the number of positions following to the end of that data element.
 
-	// All fixed length 'n' data elements are assumed to be right justified with leadinf zeroes.
+	// All fixed length 'n' (self::__N) data elements are assumed to be right justified with leadinf zeroes.
 	// All other fixed length data elements are left justified with trailing spaces.
 	// In all 'b' data elements, blocks of 8 bits are assumed to be left justified with trailing zeros.
 	// All data elements are counted from left to right.
@@ -192,25 +192,86 @@ class FieldsInfo
 	}
 
 	// Check if field and his value is valid.
+	// Case $isCheckFieldValueContent is false only value length will be checked, case true also the string content will be checked.
 	// Returns false if not or true if is a valid field number and value.
-	public function isValidFieldValue(int $field, string $value)
+	public function isValidFieldValue(int $field, string $value, bool $isCheckFieldValueContent = false)
 	{
 		$fieldInfo = $this->getFieldInfo($field);
 		$valueLen = strlen($value);
 
 		if($fieldInfo && $valueLen > 0)
 		{
-			if($fieldInfo["isVariableField"] && $valueLen <= $fieldInfo["length"])
+			if($fieldInfo["isVariableField"] && $valueLen > $fieldInfo["length"])
 			{
-				return true;
+				return false;
 			}
-			else if($valueLen == $fieldInfo["length"])
+			else if(!$fieldInfo["isVariableField"] && $valueLen != $fieldInfo["length"])
 			{
-				return true;
+				return false;
 			}
+			else if($isCheckFieldValueContent)
+			{
+				return $this->isValidContentByType($value, $fieldInfo["type"]);
+			}
+
+			return true;
 		}
 
 		return false;
+	}
+
+	// Validate value according field type.
+	public function isValidContentByType(string $value, string $type)
+	{
+		$specialCharRegex = '/[^a-zA-Z\d]/';
+
+		switch($type)
+		{
+			case self::__A:
+				return ctype_alpha($value);
+			case self::__N:
+				return ctype_digit($value);
+			case self::__AN:
+				return ctype_alnum($value);
+			default:
+				break;
+		}
+
+		for($i = 0; $i < strlen($value); $i++)
+		{
+			$currentChar = $value[$i];
+			switch($type)
+			{
+				case self::__AS:
+					if(!ctype_alpha($currentChar) && !preg_match($specialCharRegex, $currentChar))
+					{
+						return false;
+					}
+					break;
+				case self::__NS:
+					if(!ctype_digit($currentChar) && !preg_match($specialCharRegex, $currentChar))
+					{
+						return false;
+					}
+					break;
+				case self::__ANP:
+					if(!ctype_alnum($currentChar) && !ctype_space($currentChar))
+					{
+						return false;
+					}
+					break;
+				case self::__ANS:
+					if(!ctype_alnum($currentChar) && !preg_match($specialCharRegex, $currentChar))
+					{
+						return false;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+
+		return true;
 	}
 
 	// Check if field length is variable.

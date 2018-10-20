@@ -13,13 +13,13 @@ class Message0800Test extends PHPUnit_Framework_TestCase{
 
 		$this->iso0800Instance = new Message0800();
 
-		$this->iso0800Instance->setField007("0717123000");
-		$this->iso0800Instance->setField011("999999");
-		$this->iso0800Instance->setField012("123000");
-		$this->iso0800Instance->setField013("0717");
-		$this->iso0800Instance->setField041("00667788");
-		$this->iso0800Instance->setField042("000000030000003");
-		$this->iso0800Instance->setField070("001");
+		$this->assertTrue($this->iso0800Instance->setField007("0717123000"));
+		$this->assertTrue($this->iso0800Instance->setField011("999999"));
+		$this->assertTrue($this->iso0800Instance->setField012("123000"));
+		$this->assertTrue($this->iso0800Instance->setField013("0717"));
+		$this->assertTrue($this->iso0800Instance->setField041("00667788"));
+		$this->assertTrue($this->iso0800Instance->setField042("000000030000003"));
+		$this->assertTrue($this->iso0800Instance->setField070("001"));
 
 		$this->generated0800Msg = $this->iso0800Instance->getMessage();
 
