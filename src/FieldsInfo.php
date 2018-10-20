@@ -1,5 +1,7 @@
 <?php
 
+namespace ISO8583LIB;
+
 class FieldsInfo
 {
 	// Definitions and legend for abbreviations:

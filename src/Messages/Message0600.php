@@ -1,6 +1,10 @@
 <?php
 
+namespace ISO8583LIB\Messages;
+
 require_once(__DIR__.'/../../vendor/autoload.php');
+
+use ISO8583LIB\ISO8583;
 
 class Message0600 extends Message
 {

@@ -1,5 +1,7 @@
 <?php
 
+namespace ISO8583LIB;
+
 class Debug
 {
 	private static $instance;

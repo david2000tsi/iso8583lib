@@ -21,7 +21,9 @@
         }
     ],
     "autoload": {
-        "classmap": ["src", "src/Messages"]
+        "psr-4": {
+            "ISO8583LIB\\": "src/"
+        }
     },
     "minimum-stability": "dev"
 }

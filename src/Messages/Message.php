@@ -1,5 +1,7 @@
 <?php
 
+namespace ISO8583LIB\Messages;
+
 abstract class Message
 {
 	protected $isoInstance;

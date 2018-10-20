@@ -2,6 +2,8 @@
 
 require_once(__DIR__.'/../vendor/autoload.php');
 
+use ISO8583LIB\ISO8583;
+
 class Example
 {
 	private static $isoInstance;
