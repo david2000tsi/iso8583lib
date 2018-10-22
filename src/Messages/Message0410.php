@@ -1,11 +1,14 @@
 <?php
 
-require_once(__DIR__.'/Message.php');
-require_once(__DIR__.'/../ISO8583.php');
+namespace ISO8583LIB\Messages;
 
-class Message0402 extends Message
+require_once(__DIR__.'/../../vendor/autoload.php');
+
+use ISO8583LIB\ISO8583;
+
+class Message0410 extends Message
 {
-	const MTI = "0402"; // MTI of ISO8583:1987: 0402 message.
+	const MTI = "0410"; // MTI of ISO8583:1987: 0410 message.
 
 	public function __construct(string $isoMsg = "")
 	{
@@ -26,9 +29,12 @@ class Message0402 extends Message
 	public function setField011(string $value) { return $this->isoInstance->addField( 11, $value); }
 	public function setField012(string $value) { return $this->isoInstance->addField( 12, $value); }
 	public function setField013(string $value) { return $this->isoInstance->addField( 13, $value); }
+	public function setField038(string $value) { return $this->isoInstance->addField( 38, $value); }
 	public function setField039(string $value) { return $this->isoInstance->addField( 39, $value); }
 	public function setField041(string $value) { return $this->isoInstance->addField( 41, $value); }
 	public function setField042(string $value) { return $this->isoInstance->addField( 42, $value); }
+	public function setField062(string $value) { return $this->isoInstance->addField( 62, $value); }
+	public function setField090(string $value) { return $this->isoInstance->addField( 90, $value); }
 	public function setField127(string $value) { return $this->isoInstance->addField(127, $value); }
 
 	public function getField003() { return $this->isoInstance->getField(  3); }
@@ -37,9 +43,12 @@ class Message0402 extends Message
 	public function getField011() { return $this->isoInstance->getField( 11); }
 	public function getField012() { return $this->isoInstance->getField( 12); }
 	public function getField013() { return $this->isoInstance->getField( 13); }
+	public function getField038() { return $this->isoInstance->getField( 38); }
 	public function getField039() { return $this->isoInstance->getField( 39); }
 	public function getField041() { return $this->isoInstance->getField( 41); }
 	public function getField042() { return $this->isoInstance->getField( 42); }
+	public function getField062() { return $this->isoInstance->getField( 62); }
+	public function getField090() { return $this->isoInstance->getField( 90); }
 	public function getField127() { return $this->isoInstance->getField(127); }
 
 	public function getMessage()
@@ -52,9 +61,12 @@ class Message0402 extends Message
 			$this->success &= !empty($this->getField011());
 			$this->success &= !empty($this->getField012());
 			$this->success &= !empty($this->getField013());
+			$this->success &= !empty($this->getField038());
 			$this->success &= !empty($this->getField039());
 			$this->success &= !empty($this->getField041());
 			$this->success &= !empty($this->getField042());
+			$this->success &= !empty($this->getField062());
+			$this->success &= !empty($this->getField090());
 			$this->success &= !empty($this->getField127());
 		}
 

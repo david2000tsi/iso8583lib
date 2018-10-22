@@ -1,11 +1,14 @@
 <?php
 
-require_once(__DIR__.'/Message.php');
-require_once(__DIR__.'/../ISO8583.php');
+namespace ISO8583LIB\Messages;
 
-class Message0210 extends Message
+require_once(__DIR__.'/../../vendor/autoload.php');
+
+use ISO8583LIB\ISO8583;
+
+class Message0202 extends Message
 {
-	const MTI = "0210"; // MTI of ISO8583:1987: 0210 message.
+	const MTI = "0202"; // MTI of ISO8583:1987: 0202 message.
 
 	public function __construct(string $isoMsg = "")
 	{
@@ -26,7 +29,6 @@ class Message0210 extends Message
 	public function setField011(string $value) { return $this->isoInstance->addField( 11, $value); }
 	public function setField012(string $value) { return $this->isoInstance->addField( 12, $value); }
 	public function setField013(string $value) { return $this->isoInstance->addField( 13, $value); }
-	public function setField038(string $value) { return $this->isoInstance->addField( 38, $value); }
 	public function setField039(string $value) { return $this->isoInstance->addField( 39, $value); }
 	public function setField041(string $value) { return $this->isoInstance->addField( 41, $value); }
 	public function setField042(string $value) { return $this->isoInstance->addField( 42, $value); }
@@ -39,7 +41,6 @@ class Message0210 extends Message
 	public function getField011() { return $this->isoInstance->getField( 11); }
 	public function getField012() { return $this->isoInstance->getField( 12); }
 	public function getField013() { return $this->isoInstance->getField( 13); }
-	public function getField038() { return $this->isoInstance->getField( 38); }
 	public function getField039() { return $this->isoInstance->getField( 39); }
 	public function getField041() { return $this->isoInstance->getField( 41); }
 	public function getField042() { return $this->isoInstance->getField( 42); }
@@ -56,7 +57,6 @@ class Message0210 extends Message
 			$this->success &= !empty($this->getField011());
 			$this->success &= !empty($this->getField012());
 			$this->success &= !empty($this->getField013());
-			$this->success &= !empty($this->getField038());
 			$this->success &= !empty($this->getField039());
 			$this->success &= !empty($this->getField041());
 			$this->success &= !empty($this->getField042());

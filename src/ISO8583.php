@@ -1,7 +1,8 @@
 <?php
 
-require_once(__DIR__.'/FieldsInfo.php');
-require_once(__DIR__.'/Debug.php');
+namespace ISO8583LIB;
+
+require_once(__DIR__.'/../vendor/autoload.php');
 
 class ISO8583
 {

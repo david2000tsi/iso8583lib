@@ -1,6 +1,8 @@
 <?php
 
-require_once(__DIR__.'/ISO8583.php');
+require_once(__DIR__.'/../vendor/autoload.php');
+
+use ISO8583LIB\ISO8583;
 
 class Example
 {

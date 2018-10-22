@@ -1,11 +1,14 @@
 <?php
 
-require_once(__DIR__.'/Message.php');
-require_once(__DIR__.'/../ISO8583.php');
+namespace ISO8583LIB\Messages;
 
-class Message0610 extends Message
+require_once(__DIR__.'/../../vendor/autoload.php');
+
+use ISO8583LIB\ISO8583;
+
+class Message0402 extends Message
 {
-	const MTI = "0610"; // MTI of ISO8583:1987: 0610 message.
+	const MTI = "0402"; // MTI of ISO8583:1987: 0402 message.
 
 	public function __construct(string $isoMsg = "")
 	{

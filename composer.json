@@ -1,0 +1,29 @@
+{
+    "name": "david2000tsi/iso8583lib",
+    "description": "This is a basic implementation of ISO8583 for PHP language for generate and decode messages.",
+    "type": "library",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0"
+    },
+    "authors": [
+        {
+            "name": "David Alves",
+            "email": "david2000tsi@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/david2000tsi/iso8583lib.git"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ISO8583LIB\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -1,6 +1,8 @@
 <?php
 
-require_once(__DIR__.'/../messages/Message0202.php');
+require_once(__DIR__.'/../vendor/autoload.php');
+
+use ISO8583LIB\Messages\Message0202;
 
 class Message0202Test extends PHPUnit_Framework_TestCase{
 	private $original0202Msg;
