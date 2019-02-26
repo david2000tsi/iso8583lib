@@ -14,8 +14,13 @@ class ISO8583
 	// The bitmap can has 64 or 128 bits.
 	// When the first bit (from de left) is set 1, soh there is a secondary bitmap.
 
+	// Message type.
 	private $mti;
-	private $bitmap; // We use for temporary primary and secondary bitmap (string with 128 bytes).
+	// We use for temporary primary and secondary bitmap (string with 128 bytes).
+	private $bitmap;
+	// Fields data.
+	private $fieldsValue;
+	// Generated message (after call generateMessage() method).
 	private $msg;
 
 	// Internal fields info instance.
@@ -26,150 +31,6 @@ class ISO8583
 	private $checkFieldValueContent;
 	// Success flag.
 	private $success;
-
-	private $field_001; // Used as second bitmap.
-	private $field_002;
-	private $field_003;
-	private $field_004;
-	private $field_005;
-	private $field_006;
-	private $field_007;
-	private $field_008;
-
-	private $field_009;
-	private $field_010;
-	private $field_011;
-	private $field_012;
-	private $field_013;
-	private $field_014;
-	private $field_015;
-	private $field_016;
-
-	private $field_017;
-	private $field_018;
-	private $field_019;
-	private $field_020;
-	private $field_021;
-	private $field_022;
-	private $field_023;
-	private $field_024;
-
-	private $field_025;
-	private $field_026;
-	private $field_027;
-	private $field_028;
-	private $field_029;
-	private $field_030;
-	private $field_031;
-	private $field_032;
-
-	private $field_033;
-	private $field_034;
-	private $field_035;
-	private $field_036;
-	private $field_037;
-	private $field_038;
-	private $field_039;
-	private $field_040;
-
-	private $field_041;
-	private $field_042;
-	private $field_043;
-	private $field_044;
-	private $field_045;
-	private $field_046;
-	private $field_047;
-	private $field_048;
-
-	private $field_049;
-	private $field_050;
-	private $field_051;
-	private $field_052;
-	private $field_053;
-	private $field_054;
-	private $field_055;
-	private $field_056;
-
-	private $field_057;
-	private $field_058;
-	private $field_059;
-	private $field_060;
-	private $field_061;
-	private $field_062;
-	private $field_063;
-	private $field_064;
-
-	private $field_065;
-	private $field_066;
-	private $field_067;
-	private $field_068;
-	private $field_069;
-	private $field_070;
-	private $field_071;
-	private $field_072;
-
-	private $field_073;
-	private $field_074;
-	private $field_075;
-	private $field_076;
-	private $field_077;
-	private $field_078;
-	private $field_079;
-	private $field_080;
-
-	private $field_081;
-	private $field_082;
-	private $field_083;
-	private $field_084;
-	private $field_085;
-	private $field_086;
-	private $field_087;
-	private $field_088;
-
-	private $field_089;
-	private $field_090;
-	private $field_091;
-	private $field_092;
-	private $field_093;
-	private $field_094;
-	private $field_095;
-	private $field_096;
-
-	private $field_097;
-	private $field_098;
-	private $field_099;
-	private $field_100;
-	private $field_101;
-	private $field_102;
-	private $field_103;
-	private $field_104;
-
-	private $field_105;
-	private $field_106;
-	private $field_107;
-	private $field_108;
-	private $field_109;
-	private $field_110;
-	private $field_111;
-	private $field_112;
-
-	private $field_113;
-	private $field_114;
-	private $field_115;
-	private $field_116;
-	private $field_117;
-	private $field_118;
-	private $field_119;
-	private $field_120;
-
-	private $field_121;
-	private $field_122;
-	private $field_123;
-	private $field_124;
-	private $field_125;
-	private $field_126;
-	private $field_127;
-	private $field_128;
 
 	// Initialize internal variables.
 	private function init(string $isoVersion)
@@ -185,9 +46,7 @@ class ISO8583
 		{
 			for($i = 0; $i < FieldsInfo::NUM_FIELD_MAX; $i++)
 			{
-				$_field = $this->getFieldVar($i + 1);
-				$this->$_field = "";
-
+				$this->fieldsValue[$i] = "";
 				$this->bitmap .= "0";
 			}
 
@@ -285,12 +144,6 @@ class ISO8583
 		return $this->success;
 	}
 
-	// Get internal field variable name.
-	private function getFieldVar(int $field)
-	{
-		return sprintf("field_%03d", $field);
-	}
-
 	// Update the bitmap according informed field number.
 	private function updateBitmap(int $field, bool $addField = true)
 	{
@@ -377,8 +230,7 @@ class ISO8583
 	{
 		if($this->fieldsInfo->isValidField($field))
 		{
-			$_field = $this->getFieldVar($field);
-			return $this->$_field;
+			return $this->fieldsValue[$field - 1];
 		}
 		return false;
 	}
@@ -393,15 +245,14 @@ class ISO8583
 
 		if($this->fieldsInfo->isValidFieldValue($field, $value, $this->checkFieldValueContent))
 		{
-			$_field = $this->getFieldVar($field);
-			$this->$_field = $value;
+			$this->fieldsValue[$field - 1] = $value;
 
 			$this->updateBitmap($field);
-			Debug::getInstance()->printDebug($_field." -> ".$value.", added!\n");
+			Debug::getInstance()->printDebug("Field (".$field.") -> [".$value."] added!\n");
 			return true;
 		}
 
-		Debug::getInstance()->printDebug(":field_".$field." -> ".$value.", could not be added!\n");
+		Debug::getInstance()->printDebug("Field (".$field.") -> [".$value."] could not be added!\n");
 		return false;
 	}
 
@@ -410,16 +261,16 @@ class ISO8583
 	{
 		if($this->fieldsInfo->isValidField($field))
 		{
-			$_field = $this->getFieldVar($field);
-			$this->$_field = "";
+			$value = $this->fieldsValue[$field - 1];
+			$this->fieldsValue[$field - 1] = "";
 
 			$this->updateBitmap($field, false);
 
-			Debug::getInstance()->printDebug($_field." -> ".$value.", could not be removed!\n");
+			Debug::getInstance()->printDebug("Field (".$field.") -> [".$value."] removed!\n");
 			return true;
 		}
 
-		Debug::getInstance()->printDebug(":field_".$field." -> ".$value.", removed!\n");
+		Debug::getInstance()->printDebug("Field (".$field.") -> [".$value."] could not be removed!\n");
 		return false;
 	}
 
@@ -477,7 +328,7 @@ class ISO8583
 		// If there is secondary bitmap soh we will also copy it to message (more 16 bytes, replacing field 001).
 		if($this->bitmap[0])
 		{
-			$this->field_001 = $this->getSecondaryBitmap();
+			$this->fieldsValue[0] = $this->getSecondaryBitmap();
 		}
 
 		// Lets go to read all fields...
@@ -632,7 +483,7 @@ class ISO8583
 			}
 
 			$this->bitmap .= $this->restoreBitmapFromHexString($secondaryBitmap);
-			$this->field_001 = $secondaryBitmap;
+			$this->fieldsValue[0] = $secondaryBitmap;
 			$fieldsIsoMsg = FieldsInfo::NUM_FIELD_MAX;
 
 			Debug::getInstance()->printDebug("Secondary bitmap (".strlen($primaryBitmap)."): [".$secondaryBitmap."]\n");
@@ -650,7 +501,6 @@ class ISO8583
 				}
 
 				$realI = $i + 1;
-				$_field = $this->getFieldVar($realI);
 				$sizeInt = 0;
 				$value = "";
 
@@ -667,17 +517,17 @@ class ISO8583
 					$value = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeInt);
 				}
 
-				$this->$_field = $value;
+				$this->fieldsValue[$i] = $value;
 
 				// Validate length.
-				$fieldRecoveredLen = strlen($this->$_field);
+				$fieldRecoveredLen = strlen($this->fieldsValue[$i]);
 				if($sizeInt != $fieldRecoveredLen)
 				{
-					Debug::getInstance()->printDebug($_field." -> Warning, bad ISO field: expected [".$sizeInt."] but got [".$fieldRecoveredLen."]! -> ".$this->$_field."\n");
+					Debug::getInstance()->printDebug("Field (".$realI.") -> Warning, bad ISO field: expected [".$sizeInt."] but got [".$fieldRecoveredLen."]! -> ".$this->fieldsValue[$i]."\n");
 				}
 				else
 				{
-					Debug::getInstance()->printDebug($_field." -> ".$this->$_field."\n");
+					Debug::getInstance()->printDebug("Field (".$realI.") -> ".$this->fieldsValue[$i]."\n");
 				}
 			}
 		}
