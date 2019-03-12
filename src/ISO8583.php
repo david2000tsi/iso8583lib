@@ -44,7 +44,7 @@ class ISO8583
 
 		if($this->success)
 		{
-			for($i = 0; $i < FieldsInfo::NUM_FIELD_MAX; $i++)
+			for($i = 1; $i <= FieldsInfo::NUM_FIELD_MAX; $i++)
 			{
 				$this->fieldsValue[$i] = "";
 				$this->bitmap .= "0";
@@ -230,7 +230,7 @@ class ISO8583
 	{
 		if($this->fieldsInfo->isValidField($field))
 		{
-			return $this->fieldsValue[$field - 1];
+			return $this->fieldsValue[$field];
 		}
 		return false;
 	}
@@ -245,7 +245,7 @@ class ISO8583
 
 		if($this->fieldsInfo->isValidFieldValue($field, $value, $this->checkFieldValueContent))
 		{
-			$this->fieldsValue[$field - 1] = $value;
+			$this->fieldsValue[$field] = $value;
 
 			$this->updateBitmap($field);
 			Debug::getInstance()->printDebug("Field (".$field.") -> [".$value."] added!\n");
@@ -261,8 +261,8 @@ class ISO8583
 	{
 		if($this->fieldsInfo->isValidField($field))
 		{
-			$value = $this->fieldsValue[$field - 1];
-			$this->fieldsValue[$field - 1] = "";
+			$value = $this->fieldsValue[$field];
+			$this->fieldsValue[$field] = "";
 
 			$this->updateBitmap($field, false);
 
@@ -328,7 +328,7 @@ class ISO8583
 		// If there is secondary bitmap soh we will also copy it to message (more 16 bytes, replacing field 001).
 		if($this->bitmap[0])
 		{
-			$this->fieldsValue[0] = $this->getSecondaryBitmap();
+			$this->fieldsValue[1] = $this->getSecondaryBitmap();
 		}
 
 		// Lets go to read all fields...
@@ -483,16 +483,16 @@ class ISO8583
 			}
 
 			$this->bitmap .= $this->restoreBitmapFromHexString($secondaryBitmap);
-			$this->fieldsValue[0] = $secondaryBitmap;
+			$this->fieldsValue[1] = $secondaryBitmap;
 			$fieldsIsoMsg = FieldsInfo::NUM_FIELD_MAX;
 
 			Debug::getInstance()->printDebug("Secondary bitmap (".strlen($primaryBitmap)."): [".$secondaryBitmap."]\n");
 		}
 
-		// Set $i to 1 because we need to skip the field 001 (used as secondary bitmap).
-		for($i = 1; $i < $fieldsIsoMsg; $i++)
+		// Set $i = 2 because we need to skip the field 001 (used as secondary bitmap).
+		for($i = 2; $i <= $fieldsIsoMsg; $i++)
 		{
-			if($this->bitmap[$i])
+			if($this->bitmap[$i - 1])
 			{
 				// Has data in bitmap but has not enough data in the message.
 				if(strlen($isoMsg) == 0)
@@ -500,19 +500,18 @@ class ISO8583
 					break;
 				}
 
-				$realI = $i + 1;
 				$sizeInt = 0;
 				$value = "";
 
-				if($this->fieldsInfo->isVariableField($realI))
+				if($this->fieldsInfo->isVariableField($i))
 				{
-					$sizeQtyChar = $this->fieldsInfo->getSizeOfLengthVariableField($realI);
+					$sizeQtyChar = $this->fieldsInfo->getSizeOfLengthVariableField($i);
 					$sizeInt = (int) $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeQtyChar);
 					$value = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeInt);
 				}
 				else
 				{
-					$fieldInfo = $this->fieldsInfo->getFieldInfo($realI);
+					$fieldInfo = $this->fieldsInfo->getFieldInfo($i);
 					$sizeInt = $fieldInfo["length"];
 					$value = $this->getStringFromBeginningAndCleanFromOriginalString($isoMsg, $sizeInt);
 				}
@@ -523,16 +522,16 @@ class ISO8583
 				$fieldRecoveredLen = strlen($this->fieldsValue[$i]);
 				if($sizeInt != $fieldRecoveredLen)
 				{
-					Debug::getInstance()->printDebug("Field (".$realI.") -> Warning, bad ISO field: expected [".$sizeInt."] but got [".$fieldRecoveredLen."]! -> ".$this->fieldsValue[$i]."\n");
+					Debug::getInstance()->printDebug("Field (".$i.") -> Warning, bad ISO field: expected [".$sizeInt."] but got [".$fieldRecoveredLen."]! -> ".$this->fieldsValue[$i]."\n");
 				}
 				else
 				{
-					Debug::getInstance()->printDebug("Field (".$realI.") -> ".$this->fieldsValue[$i]."\n");
+					Debug::getInstance()->printDebug("Field (".$i.") -> ".$this->fieldsValue[$i]."\n");
 				}
 			}
 		}
 
-		if($i != $fieldsIsoMsg)
+		if($i <= $fieldsIsoMsg)
 		{
 			Debug::getInstance()->printDebug("Failure, ISO message soo short!\n");
 			return false;
